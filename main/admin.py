@@ -1,5 +1,5 @@
 from django.contrib import admin
-from base.models import Room, Topic, Message
+from main.models import Room, Topic, Message
 
 @admin.register(Room)
 class RoomAdmin(admin.ModelAdmin):

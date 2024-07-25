@@ -1,0 +1,30 @@
+<!doctype html>
+{# {% load static %} #}
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <!--FontAwesome CSS-->
+    <!-- {# <link rel="stylesheet" href="{% static 'app/css/all.min.css' %}"> #} -->
+
+    <!--Custom CSS-->
+    <!-- {# <link rel="stylesheet" href="{% static 'app/css/style.css' %}"> #} -->
+
+    <!-- {# <link rel="icon" type="image/x-icon" href="{% static 'app/images/favicon.ico' %}"> #} -->
+
+
+    <title>StudyBuddy - {% block title %}  {% endblock title %} </title>
+  </head>
+  <body>
+
+    {% include 'main/navbar.html' %}
+  	
+    {% block content %}  
+
+    {% endblock content %}
+
+  </body>
+</html>
