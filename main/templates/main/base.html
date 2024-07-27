@@ -1,5 +1,5 @@
 <!doctype html>
-{# {% load static %} #}
+{% load static %}
 <html lang="en">
   <head>
     <!-- Required meta tags -->
@@ -11,7 +11,7 @@
     <!-- {# <link rel="stylesheet" href="{% static 'app/css/all.min.css' %}"> #} -->
 
     <!--Custom CSS-->
-    <!-- {# <link rel="stylesheet" href="{% static 'app/css/style.css' %}"> #} -->
+    <link rel="stylesheet" href="{% static 'main/css/core.css' %}">
 
     <!-- {# <link rel="icon" type="image/x-icon" href="{% static 'app/images/favicon.ico' %}"> #} -->
 
@@ -21,6 +21,12 @@
   <body>
 
     {% include 'main/navbar.html' %}
+
+    {% if messages %}
+        {% for message in messages %}
+            <p {% if message.tags %} class="{{message.tags}}" {% endif %}>{{message}}</p>
+        {% endfor %}
+    {% endif %}
   	
     {% block content %}  
 
