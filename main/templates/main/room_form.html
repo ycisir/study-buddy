@@ -1,11 +1,8 @@
 {% extends 'main/base.html' %}
 
 {% block title %} 
-	{% if page == 'create' %} Create Room 
-	{% else %} Update Room {% endif %}
+	{% if page == 'create' %} Create Room {% else %} Update Room {% endif %}
 {% endblock title %}
-
-
 
 {% block content %}
 
@@ -13,7 +10,8 @@
 	<form method="POST" action="">
 		{% csrf_token %}
 		{{form.as_p}}
-		<input type="submit" value="Submit">
+		<input type="submit" value="Save">
+		<a href="{{request.META.HTTP_REFERER}}">Cancel</a>
 	</form>
 </div>
 
