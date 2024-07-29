@@ -71,7 +71,14 @@ class DeleteMessage(DeleteView):
 class CreateRoom(CreateView):
 	form_class = RoomForm
 	template_name = 'main/room_form.html'
-	success_url = '/'
+	# success_url = '/'
+
+	def form_valid(self, form):
+		room = form.save(commit=False)
+		room.host = self.request.user
+		room.save()
+		return redirect('home')
+
 
 	def get_context_data(self, **kwargs):
 		context = super(CreateRoom, self).get_context_data(**kwargs)
@@ -122,3 +129,14 @@ class UserSignup(FormView):
 class ProfileView(DetailView):
 	model = User
 	template_name = 'main/profile.html'
+
+	def get_context_data(self, **kwargs):
+		user = self.get_object()
+		context = super(ProfileView, self).get_context_data(**kwargs)
+		rooms = user.room_set.all()
+		room_messages = user.message_set.all()
+		topics = Topic.objects.all()
+		context['rooms'] = rooms
+		context['room_messages'] = room_messages
+		context['topics'] = topics
+		return context
