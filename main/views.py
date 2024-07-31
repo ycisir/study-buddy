@@ -1,6 +1,9 @@
+from typing import Any
+from django.http import HttpRequest
+from django.http.response import HttpResponse as HttpResponse
 from django.shortcuts import render, redirect
 from main.models import Room, Topic, Message
-from main.forms import RoomForm, LoginForm, SignupForm
+from main.forms import RoomForm, LoginForm, SignupForm, UserUpdateForm
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
@@ -19,7 +22,7 @@ class HomeView(ListView):
 		context = super(HomeView, self).get_context_data(**kwargs)
 		q = self.request.GET.get('q') if self.request.GET.get('q') != None else ''
 		rooms = Room.objects.filter(
-			Q(topic__name__icontains=q) | Q(name__icontains=q) | Q(desc__icontains=q)
+			Q(topic__name__icontains=q) | Q(name__icontains=q) | Q(description__icontains=q)
 		)
 		room_messages = Message.objects.filter(Q(room__topic__name__icontains=q))
 
@@ -71,18 +74,22 @@ class DeleteMessage(DeleteView):
 class CreateRoom(CreateView):
 	form_class = RoomForm
 	template_name = 'main/room_form.html'
-	# success_url = '/'
 
-	def form_valid(self, form):
-		room = form.save(commit=False)
-		room.host = self.request.user
-		room.save()
+	def post(self, request, *args, **kwargs):
+		topic_name = request.POST.get('topic')
+		topic, created = Topic.objects.get_or_create(name=topic_name)
+		room = Room.objects.create(
+			host= request.user, 
+			topic= topic, 
+			name= request.POST.get('name'),
+			description= request.POST.get('description'),
+		)
 		return redirect('home')
-
 
 	def get_context_data(self, **kwargs):
 		context = super(CreateRoom, self).get_context_data(**kwargs)
 		context['page'] = 'create'
+		context['topics'] = Topic.objects.all()
 		return context
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
@@ -90,7 +97,21 @@ class UpdateRoom(UpdateView):
 	model = Room
 	form_class = RoomForm
 	template_name = 'main/room_form.html'
-	success_url = '/'
+
+	def post(self, request, *args, **kwargs):
+		room = self.get_object()
+		topic_name = request.POST.get('topic')
+		topic, created = Topic.objects.get_or_create(name=topic_name)
+		room.name = request.POST.get('name')
+		room.topic = topic
+		room.description = request.POST.get('description')
+		room.save()
+		return redirect('home')
+
+	def get_context_data(self, **kwargs):
+		context = super(UpdateRoom, self).get_context_data(**kwargs)
+		context['topics'] = Topic.objects.all()
+		return context
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class DeleteRoom(DeleteView):
@@ -126,6 +147,7 @@ class UserSignup(FormView):
 		user.save()
 		return redirect('login')
 
+
 class ProfileView(DetailView):
 	model = User
 	template_name = 'main/profile.html'
@@ -140,3 +162,10 @@ class ProfileView(DetailView):
 		context['room_messages'] = room_messages
 		context['topics'] = topics
 		return context
+	
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class UpdateUser(UpdateView):
+	model = User
+	form_class = UserUpdateForm
+	template_name = 'main/update_user.html'

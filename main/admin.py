@@ -3,7 +3,7 @@ from main.models import Room, Topic, Message
 
 @admin.register(Room)
 class RoomAdmin(admin.ModelAdmin):
-	list_display = ['id', 'name', 'desc', 'updated', 'created']
+	list_display = ['id', 'name', 'description', 'updated', 'created']
 
 
 @admin.register(Topic)
