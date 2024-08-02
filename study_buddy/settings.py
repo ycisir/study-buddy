@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from os import getenv
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,7 +22,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-4)rbu9ukprcqunnejizsz%@3f+_#mq*ehv8=dhpd)jr7ad+62)'
+# ===================================== my code ============================================
+load_dotenv()
+SECRET_KEY = getenv('KEY')
+# ===================================== my code ============================================
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -38,13 +44,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
-
+# ===================================== my code ============================================
 EXTERNAL_APPS = [
     'main',
     'rest_framework',
 ]
 
 INSTALLED_APPS += EXTERNAL_APPS
+# ===================================== my code ============================================
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -61,7 +68,9 @@ ROOT_URLCONF = 'study_buddy.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            BASE_DIR / 'templates'
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -133,6 +142,17 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # =============================== my code =======================================
 LOGIN_REDIRECT_URL = '/'
+
+MEDIA_URL = '/images/'
+
 STATICFILES_DIRS = [
     BASE_DIR / 'static'
 ]
+
+MEDIA_ROOT = BASE_DIR / 'static/images'
+
+AUTH_USER_MODEL = 'main.user'
+
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+# 'whitenoise.middleware.WhiteNoiseMiddleware',
+

@@ -1,5 +1,7 @@
 from django.contrib import admin
-from main.models import Room, Topic, Message
+from main.models import Room, Topic, Message, User
+
+
 
 @admin.register(Room)
 class RoomAdmin(admin.ModelAdmin):
@@ -15,3 +17,5 @@ class TopicAdmin(admin.ModelAdmin):
 @admin.register(Message)
 class MessageAdmin(admin.ModelAdmin):
 	list_display = ['id', 'user', 'room', 'body', 'updated', 'created']
+
+admin.site.register(User)

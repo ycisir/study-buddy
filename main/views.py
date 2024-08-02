@@ -1,8 +1,7 @@
-from typing import Any
 from django.http import HttpRequest
 from django.http.response import HttpResponse as HttpResponse
 from django.shortcuts import render, redirect
-from main.models import Room, Topic, Message
+from main.models import Room, Topic, Message, User
 from main.forms import RoomForm, LoginForm, SignupForm, UserUpdateForm
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
@@ -11,7 +10,6 @@ from django.db.models import Q
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from django.contrib.auth.models import User
 from django.views.generic import TemplateView
 
 class HomeView(ListView):
@@ -114,16 +112,17 @@ class UpdateRoom(UpdateView):
 		context['topics'] = Topic.objects.all()
 		return context
 
+
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class DeleteRoom(DeleteView):
 	model = Room
 	success_url = '/'
 	template_name = 'main/confirm_delete.html'
 
+
 class UserLogin(LoginView):
 	template_name = 'main/register_login.html'
 	authentication_form = LoginForm
-	success_url = 'home'
 
 	def dispatch(self, request, *args, **kwargs):
 		if request.user.is_authenticated:
