@@ -8,16 +8,10 @@ class RoomForm(forms.ModelForm):
 		fields = '__all__'
 		exclude = ['host', 'participants']
 
-
-class LoginForm(AuthenticationForm):
-	password = forms.CharField(widget=forms.PasswordInput())
-
-
 class SignupForm(UserCreationForm):
 	class Meta:
 		model = User
 		fields = ['name', 'username', 'email', 'password1', 'password2']
-
 
 class UserUpdateForm(UserChangeForm):
 	password = None
