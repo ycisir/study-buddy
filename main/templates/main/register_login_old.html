@@ -1,0 +1,31 @@
+{% extends 'main/main.html' %}
+{% block title %} 
+	{% if page == 'register' %} Signup {% else %} Login {% endif %}
+{% endblock title %}
+
+{% block content %}
+
+{% if page == 'register' %}
+	<div>
+		<form action="" method="POST" novalidate>
+			{% csrf_token %}
+			{{form.as_p}}
+			<input type="submit" value="Signup">
+		</form>
+		
+		<p>already signed up? <a href="{% url 'login' %}">login</a></p>
+	</div>
+{% else %}
+	<div>
+		<form action="" method="POST" novalidate>
+			{% csrf_token %}
+			{{form.as_p}}
+			<input type="submit" value="Login">
+		</form>
+
+		<p>haven't signed up yet? <a href="{% url 'signup' %}">signup</a></p>
+	</div>
+{% endif %}
+
+
+{% endblock content %}

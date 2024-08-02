@@ -5,6 +5,8 @@ urlpatterns = [
     path('', views.HomeView.as_view(), name='home'),
     path('room/<int:pk>', views.RoomView.as_view(), name='room'),
     path('profile/<int:pk>', views.ProfileView.as_view(), name='user-profile'),
+    path('topics/', views.TopicsPage.as_view(), name='topics'),
+    path('activity/', views.ActivityPage.as_view(), name='activity'),
 
 
     path('create/', views.CreateRoom.as_view(), name='create'),

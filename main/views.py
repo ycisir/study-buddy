@@ -12,6 +12,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib.auth.models import User
+from django.views.generic import TemplateView
 
 class HomeView(ListView):
 	model = Room
@@ -27,7 +28,7 @@ class HomeView(ListView):
 		room_messages = Message.objects.filter(Q(room__topic__name__icontains=q))
 
 		room_count = rooms.count()
-		topics = Topic.objects.all()
+		topics = Topic.objects.all()[0:5]
 		context['rooms'] = rooms
 		context['topics'] = topics
 		context['q'] = q
@@ -169,3 +170,27 @@ class UpdateUser(UpdateView):
 	model = User
 	form_class = UserUpdateForm
 	template_name = 'main/update_user.html'
+	
+	def form_valid(self, form):
+		user = self.get_object()
+		form.save()
+		return redirect('user-profile', pk=user.id)
+
+
+class TopicsPage(TemplateView):
+	template_name = 'main/topics.html'
+
+	def get_context_data(self, **kwargs):
+		context = super(TopicsPage, self).get_context_data(**kwargs)
+		q = self.request.GET.get('q') if self.request.GET.get('q') != None else ''
+		context['topics'] = Topic.objects.filter(name__icontains=q)
+		return context
+
+
+class ActivityPage(TemplateView):
+	template_name = 'main/activity.html'
+
+	def get_context_data(self, **kwargs):
+		context = super(ActivityPage, self).get_context_data(**kwargs)
+		context['room_messages'] = Message.objects.all()
+		return context
