@@ -1,5 +1,11 @@
 # study-buddy
 
+ Django-based web application designed to facilitate collaborative learning among students
+
+<blockquote>
+  Demo can be found <a href="https://study-buddy-tm48.onrender.com/">here</a>
+</blockquote>
+
 ## Running the web app locally
 + Create project folder `study-buddy`
 + Create virtual env `python3 -m venv env`
