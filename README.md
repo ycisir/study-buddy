@@ -6,6 +6,9 @@
   Demo can be found <a href="https://study-buddy-tm48.onrender.com/">here</a>
 </blockquote>
 
+> [!NOTE]  
+> Render free instance will spin down with inactivity, which can delay requests by 50 seconds or more.
+
 ## Running the web app locally
 + Create project folder `study-buddy`
 + Create virtual env `python3 -m venv env`
